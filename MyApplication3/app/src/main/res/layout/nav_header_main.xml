@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+
+    android:background="@drawable/navigationbarbackground"
+    android:gravity="bottom"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="35dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/myCardView"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:cardCornerRadius="50dp"
+
+        >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/profile" />
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text"
+        android:layout_below="@id/myCardView"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:textColor="@color/white"
+        android:text="Elamukhil"
+        />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text"
+        android:paddingTop="8dp"
+        android:textColor="@color/white"
+        android:text="elamukhil@gmail.com" />
+</RelativeLayout>
