@@ -14,8 +14,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.myapplication.Data.MailData
-import com.example.myapplication.Domain.Mail
 import com.example.myapplication.Data.MyContentProvider
+import com.example.myapplication.Domain.Mail
+import com.example.myapplication.Presentation.NavigationDrawer.NavigationDrawerActivity
 import com.example.myapplication.R
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -45,7 +46,6 @@ class ComposeActivity : AppCompatActivity() {
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -72,8 +72,7 @@ class ComposeActivity : AppCompatActivity() {
                 alertDialog.setCancelable(false)
                 alertDialog.show()
                 true
-            }
-            else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(string).matches()) {
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(string).matches()) {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Email id is invalid")
                 builder.setIcon(android.R.drawable.ic_dialog_alert)
@@ -85,8 +84,7 @@ class ComposeActivity : AppCompatActivity() {
                 alertDialog.setCancelable(false)
                 alertDialog.show()
                 true
-            }
-            else if (string1.isEmpty()) {
+            } else if (string1.isEmpty()) {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Send email without subject?")
                 builder.setIcon(android.R.drawable.ic_dialog_alert)
@@ -98,8 +96,7 @@ class ComposeActivity : AppCompatActivity() {
                     val formatted = current.format(formatter).toString()
                     val list = formatted.split(" ")
                     val mail = Mail(MailData.getsize() + 1, "android@gmail.com", string, string1, string2, list[0], list[1] + " " + list[2])
-                    val context = applicationContext
-                    MyContentProvider.DatabaseHelper(context).insertdata(mail)
+                    MyContentProvider.DatabaseHelper(applicationContext).insertdata(mail, 3)
                     Toast.makeText(applicationContext, "Mail sent", Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -110,33 +107,25 @@ class ComposeActivity : AppCompatActivity() {
                 alertDialog.setCancelable(false)
                 alertDialog.show()
                 true
-            }
-            else
-            {
+            } else {
                 val current = LocalDateTime.now()
                 val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh.mm a")
                 val formatted = current.format(formatter).toString()
                 val list = formatted.split(" ")
                 val mail = Mail(MailData.getsize() + 1, "android@gmail.com", string, string1, string2, list[0], list[1] + " " + list[2])
-                val context = applicationContext
-                MyContentProvider.DatabaseHelper(context).insertdata(mail)
+                MyContentProvider.DatabaseHelper(applicationContext).insertdata(mail, 3)
                 Toast.makeText(applicationContext, "Mail sent", Toast.LENGTH_SHORT).show()
                 finish()
                 true
             }
-        }
-        else
-        {
+        } else {
             super.onOptionsItemSelected(item)
         }
-
-
-
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
+
 }

@@ -14,10 +14,9 @@ import com.example.myapplication.Data.MyContentProvider
 import com.example.myapplication.R
 
 
-
 class HomeFragment : Fragment() {
 
-    lateinit var value:String
+    lateinit var value: String
     val list = mutableListOf<Mapvalues>().apply { addAll(MailData.getitems()) }
     var adapter = ListAdapter(list)
     override fun onCreateView(
@@ -27,8 +26,8 @@ class HomeFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val recyclerView = root.findViewById<View>(R.id.recyclerView) as RecyclerView
-        val context=context
-        MyContentProvider.DatabaseHelper(context).getdata()
+        val context = context
+        MyContentProvider.DatabaseHelper(context).getquery()
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         recyclerView.adapter = adapter
@@ -36,89 +35,68 @@ class HomeFragment : Fragment() {
     }
 
 
-    fun displaylist(myValue: String)
-
-    {
+    fun displaylist(myValue: String) {
         val view: TextView? = getView()?.findViewById(R.id.noitems)
         val view1: ImageView? = getView()?.findViewById(R.id.image)
         view?.setVisibility(View.INVISIBLE)
         view1?.setVisibility(View.INVISIBLE)
-        value=myValue
-        if(myValue=="Inbox")
-        {
+        value = myValue
+        if (myValue == "Inbox") {
             list.clear()
             val list1 = MailData.getitems().filter { it.label == "Inbox" }
-            for(i in list1) {
+            for (i in list1) {
                 list.add(i)
             }
-            if(list.isEmpty())
-            {
+            if (list.isEmpty()) {
                 view?.setVisibility(View.VISIBLE)
                 view1?.setVisibility(View.VISIBLE)
-
             }
             adapter.notifyDataSetChanged()
-        }
-        else if(myValue=="Drafts")
-        {
+        } else if (myValue == "Drafts") {
             list.clear()
             val list1 = MailData.getitems().filter { it.label == "Drafts" }
-            for(i in list1) {
+            for (i in list1) {
                 list.add(i)
             }
-            if(list.isEmpty())
-            {
+            if (list.isEmpty()) {
                 view?.setVisibility(View.VISIBLE)
                 view1?.setVisibility(View.VISIBLE)
-
             }
             adapter.notifyDataSetChanged()
 
-        }
-        else if(myValue=="Sent")
-        {
+        } else if (myValue == "Sent") {
 
             list.clear()
             val list1 = MailData.getitems().filter { it.label == "Sent" }
-            for(i in list1) {
+            for (i in list1) {
                 list.add(i)
             }
-            if(list.isEmpty())
-            {
+            if (list.isEmpty()) {
                 view?.setVisibility(View.VISIBLE)
                 view1?.setVisibility(View.VISIBLE)
-
             }
             adapter.notifyDataSetChanged()
-        }
-        else if(myValue=="Spam")
-        {
+        } else if (myValue == "Spam") {
             list.clear()
             val list1 = MailData.getitems().filter { it.label == "Spam" }
-            for(i in list1) {
+            for (i in list1) {
                 list.add(i)
             }
-            if(list.isEmpty())
-            {
-                    view?.setVisibility(View.VISIBLE)
-                    view1?.setVisibility(View.VISIBLE)
-
+            if (list.isEmpty()) {
+                view?.setVisibility(View.VISIBLE)
+                view1?.setVisibility(View.VISIBLE)
             }
             adapter.notifyDataSetChanged()
-        }
-        else if(myValue=="Trash")
-        {
+        } else if (myValue == "Trash") {
 
             list.clear()
             val list1 = MailData.getitems().filter { it.label == "Trash" }
-            for(i in list1) {
+            for (i in list1) {
                 list.add(i)
             }
-            if(list.isEmpty())
-            {
+            if (list.isEmpty()) {
                 view?.setVisibility(View.VISIBLE)
                 view1?.setVisibility(View.VISIBLE)
-
             }
             adapter.notifyDataSetChanged()
         }
@@ -128,7 +106,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         MailData.cleardata()
-        MyContentProvider.DatabaseHelper(context).getdata()
+        MyContentProvider.DatabaseHelper(context).getquery()
         displaylist(value)
     }
 

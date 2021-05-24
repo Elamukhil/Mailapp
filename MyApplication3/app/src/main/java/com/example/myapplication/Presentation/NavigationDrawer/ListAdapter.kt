@@ -17,37 +17,30 @@ import java.util.*
 
 
 class ListAdapter(private val listdata: List<Mapvalues>) :
-    RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+        RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val listItem = layoutInflater.inflate(R.layout.list_item, parent, false)
-
         return ViewHolder(listItem)
     }
 
 
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.textView.text = listdata[position].mail.from
-        holder.textView1.text=listdata[position].mail.subject
-        if(listdata[position].isread==1)
-        {
+        holder.textView1.text = listdata[position].mail.subject
+        if (listdata[position].isread == 1) {
             holder.textView.setTypeface(Typeface.DEFAULT_BOLD)
-        }
-        else
-        {
+        } else {
             holder.textView.setTypeface(Typeface.DEFAULT)
         }
         val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH)
         val myDate: Date = sdf.parse(listdata[position].mail.date)
         sdf.applyPattern("d MMM")
         val Date: String = sdf.format(myDate)
-        holder.textView2.text=Date
+        holder.textView2.text = Date
         holder.textView3.text = listdata[position].mail.from.substring(0, 1).toUpperCase()
-
         holder.imageView.setImageResource(R.drawable.bg_circle)
-
         holder.relativeLayout.setOnClickListener { view ->
             var intent = Intent(view.context, DetailActivity::class.java)
             intent.putExtra("mail", listdata[position].mail.mailId)
@@ -62,9 +55,9 @@ class ListAdapter(private val listdata: List<Mapvalues>) :
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imageView: ImageView
         var textView: TextView
-        var textView1:TextView
-        var textView2:TextView
-        var textView3:TextView
+        var textView1: TextView
+        var textView2: TextView
+        var textView3: TextView
         var relativeLayout: RelativeLayout
 
         init {
