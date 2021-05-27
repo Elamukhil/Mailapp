@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.myapplication.Data.MailData
 import com.example.myapplication.Data.MyContentProvider
-import com.example.myapplication.Presentation.NavigationDrawer.NavigationDrawerActivity
 import com.example.myapplication.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,41 +29,39 @@ class DetailActivity : AppCompatActivity() {
         getSupportActionBar()?.setDisplayShowHomeEnabled(true)
         val intent = intent
         val mail = intent.getIntExtra("mail", 0)
-        val list = MailData.getitems().filter { it.mail.mailId == mail }
-        val str = list[0].mail.from
-        val str1 = list[0].mail.subject
-        val str2 = list[0].mail.body
-        val str3 = list[0].mail.date
-        val str5 = list[0].mail.time
-        val str6 = list[0].mail.to
-        val str4 = "<html> <body>" +
-                "<p>$str2</p>" +
+        val list = MailData.getInstance(applicationContext).getitems().filter { it.mailId == mail }
+        val from = list[0].from
+        val subject = list[0].subject
+        val body = list[0].body
+        val date = list[0].date
+        val time = list[0].time
+        val to = list[0].to
+        val webtext = "<html> <body>" +
+                "<p>$body</p>" +
                 "</body></html>"
-        var str7 = list[0].label
-
+        val foldername = MailData.getInstance(applicationContext).getfoldername(list[0].folderId)
         val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH)
-        val myDate: Date = sdf.parse(str3)
+        val myDate: Date = sdf.parse(date)
         sdf.applyPattern("EEE, d MMM yyyy")
         val Date: String = sdf.format(myDate)
         val view = findViewById<View>(R.id.cardtextview) as TextView
-        view.setText(str1)
-
+        view.setText(subject)
         val textView1 = findViewById<View>(R.id.textView1) as TextView
-        textView1.setText(str)
+        textView1.setText(from)
         val textView2 = findViewById<View>(R.id.textView2) as TextView
         textView2.setText(Date)
         val textView3 = findViewById<View>(R.id.textView3) as TextView
-        textView3.setText(str5)
+        textView3.setText(time)
         val textView4 = findViewById<View>(R.id.textView4) as TextView
-        textView4.setText("To : $str6")
+        textView4.setText("To : $to")
         val textView5 = findViewById<View>(R.id.textView5) as TextView
-        textView5.setText(str.substring(0, 1).toUpperCase())
+        textView5.setText(from.substring(0, 1).toUpperCase())
         val textView6 = findViewById<View>(R.id.textView6) as TextView
-        textView6.setText("\u2022 $str7")
+        textView6.setText("\u2022 $foldername")
         val mywebview = findViewById<View>(R.id.webView) as WebView
-        mywebview.loadData(str4!!, "text/html", "UTF-8")
+        mywebview.loadData(webtext!!, "text/html", "UTF-8")
         val context = applicationContext
-        MyContentProvider.DatabaseHelper(context).isread(mail)
+        MailData.getInstance(context).isread(mail)
 
     }
 
@@ -76,14 +73,14 @@ class DetailActivity : AppCompatActivity() {
         val intent = intent
         val mail = intent.getIntExtra("mail", 1)
         return if (id == R.id.action_settings) {
-            val list = MailData.getitems().filter { it.mail.mailId == mail }
-            if (list[0].label == "Trash") {
+            val list = MailData.getInstance(applicationContext).getitems().filter { it.mailId == mail }
+            if (MailData.getInstance(applicationContext).getfoldername(list[0].folderId) == "Trash") {
                 Toast.makeText(getApplicationContext(), "Mail deleted", Toast.LENGTH_SHORT).show()
-                MyContentProvider.DatabaseHelper(applicationContext).deletedata(mail)
+                MailData.getInstance(applicationContext).deletedata(mail)
                 finish()
                 true
             } else {
-                MyContentProvider.DatabaseHelper(applicationContext).updatedata(mail)
+                MailData.getInstance(applicationContext).updatedata(mail)
                 Toast.makeText(getApplicationContext(), "Mail moved to Trash", Toast.LENGTH_SHORT).show()
                 finish()
                 true
@@ -110,8 +107,6 @@ class DetailActivity : AppCompatActivity() {
             view.setVisibility(View.INVISIBLE)
         else
             view.setVisibility(View.VISIBLE)
-
-
     }
 
 }

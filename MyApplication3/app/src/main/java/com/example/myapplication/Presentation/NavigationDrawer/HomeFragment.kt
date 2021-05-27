@@ -9,15 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.Data.MailData
-import com.example.myapplication.Domain.Mapvalues
-import com.example.myapplication.Data.MyContentProvider
+import com.example.myapplication.Domain.Mail
 import com.example.myapplication.R
 
 
 class HomeFragment : Fragment() {
 
     lateinit var value: String
-    val list = mutableListOf<Mapvalues>().apply { addAll(MailData.getitems()) }
+    val list = mutableListOf<Mail>()
     var adapter = ListAdapter(list)
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -27,23 +26,25 @@ class HomeFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val recyclerView = root.findViewById<View>(R.id.recyclerView) as RecyclerView
         val context = context
-        MyContentProvider.DatabaseHelper(context).getquery()
+        MailData.getInstance(context!!).getquery()
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         recyclerView.adapter = adapter
+        displaylist("Inbox")
         return root
     }
 
 
-    fun displaylist(myValue: String) {
+    fun displaylist(foldername: String) {
         val view: TextView? = getView()?.findViewById(R.id.noitems)
         val view1: ImageView? = getView()?.findViewById(R.id.image)
         view?.setVisibility(View.INVISIBLE)
         view1?.setVisibility(View.INVISIBLE)
-        value = myValue
-        if (myValue == "Inbox") {
+        val context = context
+        value = foldername
+        if (foldername == "Inbox") {
             list.clear()
-            val list1 = MailData.getitems().filter { it.label == "Inbox" }
+            val list1 = MailData.getInstance(context!!).getitems().filter { it.folderId == 1 }
             for (i in list1) {
                 list.add(i)
             }
@@ -52,9 +53,9 @@ class HomeFragment : Fragment() {
                 view1?.setVisibility(View.VISIBLE)
             }
             adapter.notifyDataSetChanged()
-        } else if (myValue == "Drafts") {
+        } else if (foldername == "Drafts") {
             list.clear()
-            val list1 = MailData.getitems().filter { it.label == "Drafts" }
+            val list1 = MailData.getInstance(context!!).getitems().filter { it.folderId == 2 }
             for (i in list1) {
                 list.add(i)
             }
@@ -64,10 +65,10 @@ class HomeFragment : Fragment() {
             }
             adapter.notifyDataSetChanged()
 
-        } else if (myValue == "Sent") {
+        } else if (foldername == "Sent") {
 
             list.clear()
-            val list1 = MailData.getitems().filter { it.label == "Sent" }
+            val list1 = MailData.getInstance(context!!).getitems().filter { it.folderId == 3 }
             for (i in list1) {
                 list.add(i)
             }
@@ -76,9 +77,9 @@ class HomeFragment : Fragment() {
                 view1?.setVisibility(View.VISIBLE)
             }
             adapter.notifyDataSetChanged()
-        } else if (myValue == "Spam") {
+        } else if (foldername == "Spam") {
             list.clear()
-            val list1 = MailData.getitems().filter { it.label == "Spam" }
+            val list1 = MailData.getInstance(context!!).getitems().filter { it.folderId == 4 }
             for (i in list1) {
                 list.add(i)
             }
@@ -87,10 +88,10 @@ class HomeFragment : Fragment() {
                 view1?.setVisibility(View.VISIBLE)
             }
             adapter.notifyDataSetChanged()
-        } else if (myValue == "Trash") {
+        } else if (foldername == "Trash") {
 
             list.clear()
-            val list1 = MailData.getitems().filter { it.label == "Trash" }
+            val list1 = MailData.getInstance(context!!).getitems().filter { it.folderId == 5 }
             for (i in list1) {
                 list.add(i)
             }
@@ -105,8 +106,9 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        MailData.cleardata()
-        MyContentProvider.DatabaseHelper(context).getquery()
+        val context = context
+        MailData.getInstance(context!!).cleardata()
+        MailData.getInstance(context!!).getquery()
         displaylist(value)
     }
 

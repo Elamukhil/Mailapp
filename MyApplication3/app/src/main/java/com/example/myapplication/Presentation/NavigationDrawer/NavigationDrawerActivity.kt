@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -12,20 +11,21 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import com.example.myapplication.Data.MailData
-import com.example.myapplication.Domain.Mail
 import com.example.myapplication.Data.MyContentProvider
+import com.example.myapplication.Domain.Mail
 import com.example.myapplication.Presentation.Compose.ComposeActivity
 import com.example.myapplication.R
 import com.example.myapplication.R.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class NavigationDrawerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var mainMenu: Menu? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.navigation_drawer)
+        setContentView(layout.navigation_drawer)
         this.setTitle("Inbox")
         val toolbar = findViewById<Toolbar>(id.toolbar)
         setSupportActionBar(toolbar)
@@ -46,8 +46,7 @@ class NavigationDrawerActivity : AppCompatActivity(), NavigationView.OnNavigatio
         if (details == null) {
             val fragment = HomeFragment()
             val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
-            ft.replace(R.id.nav_host_fragment, fragment)
-            fragment.displaylist("Inbox")
+            ft.replace(id.nav_host_fragment, fragment)
             ft.commit()
         }
 
@@ -78,16 +77,16 @@ class NavigationDrawerActivity : AppCompatActivity(), NavigationView.OnNavigatio
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
         return if (id == R.id.action_settings) {
-            val mail = Mail(MailData.getsize() + 1, "ram@gmail.com", "android@gmail.com", "Survey", "This is a survey", "12.05.2021", "01.15 pm")
-            MyContentProvider.DatabaseHelper(applicationContext).insertdata(mail, 1)
-            val mail1 = Mail(MailData.getsize() + 1, "gokul@gmail.com", "android@gmail.com", "Payment", "Your bill is overdue", "01.05.2021", "12.15 pm")
-            MyContentProvider.DatabaseHelper(applicationContext).insertdata(mail1, 1)
-            val mail2 = Mail(MailData.getsize() + 1, "rahul@gmail.com", "android@gmail.com", "Movie tickets", "You booked 3 tickets", "03.05.2021", "11.15 am")
-            MyContentProvider.DatabaseHelper(applicationContext).insertdata(mail2, 1)
-            val mail3 = Mail(MailData.getsize() + 1, "paul@gmail.com", "android@gmail.com", "Hdfc Bank", "1000rs has been debited", "12.05.2021", "01.35 pm")
-            MyContentProvider.DatabaseHelper(applicationContext).insertdata(mail3, 1)
-            val mail4 = Mail(MailData.getsize() + 1, "charles@gmail.com", "android@gmail.com", "Swiggy", "Your order has been delivered", "12.05.2021", "01.15 pm")
-            MyContentProvider.DatabaseHelper(applicationContext).insertdata(mail4, 1)
+            val mail = Mail(MailData.getInstance(applicationContext).getsize() + 1, 1, 0, "ram@gmail.com", "android@gmail.com", "Survey", "This is a survey", "12.05.2021", "01.15 pm")
+            MailData.getInstance(applicationContext).insertdata(mail)
+            val mail1 = Mail(MailData.getInstance(applicationContext).getsize() + 1, 1, 0, "gokul@gmail.com", "android@gmail.com", "Payment", "Your bill is overdue", "01.05.2021", "12.15 pm")
+            MailData.getInstance(applicationContext).insertdata(mail)
+            val mail2 = Mail(MailData.getInstance(applicationContext).getsize() + 1, 1, 0, "rahul@gmail.com", "android@gmail.com", "Movie tickets", "You booked 3 tickets", "03.05.2021", "11.15 am")
+            MailData.getInstance(applicationContext).insertdata(mail2)
+            val mail3 = Mail(MailData.getInstance(applicationContext).getsize() + 1, 1, 0, "paul@gmail.com", "android@gmail.com", "Hdfc Bank", "1000rs has been debited", "12.05.2021", "01.35 pm")
+            MailData.getInstance(applicationContext).insertdata(mail3)
+            val mail4 = Mail(MailData.getInstance(applicationContext).getsize() + 1, 1, 0, "charles@gmail.com", "android@gmail.com", "Swiggy", "Your order has been delivered", "12.05.2021", "01.15 pm")
+            MailData.getInstance(applicationContext).insertdata(mail4)
             val details: HomeFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as HomeFragment
             details.displaylist("Inbox")
             true
@@ -103,27 +102,27 @@ class NavigationDrawerActivity : AppCompatActivity(), NavigationView.OnNavigatio
         when (id) {
             R.id.nav_inbox -> {
                 details!!.displaylist("Inbox")
-                mainMenu?.findItem(R.id.action_settings)?.isVisible   = true
+                mainMenu?.findItem(R.id.action_settings)?.isVisible = true
                 toolbar.setTitle("Inbox")
             }
             R.id.nav_drafts -> {
                 details!!.displaylist("Drafts")
-                mainMenu?.findItem(R.id.action_settings)?.isVisible   = false
+                mainMenu?.findItem(R.id.action_settings)?.isVisible = false
                 toolbar.setTitle("Drafts")
             }
             R.id.nav_sent -> {
                 details!!.displaylist("Sent")
-                mainMenu?.findItem(R.id.action_settings)?.isVisible   = false
+                mainMenu?.findItem(R.id.action_settings)?.isVisible = false
                 toolbar.setTitle("Sent")
             }
             R.id.nav_spam -> {
                 details!!.displaylist("Spam")
-                mainMenu?.findItem(R.id.action_settings)?.isVisible   = false
+                mainMenu?.findItem(R.id.action_settings)?.isVisible = false
                 toolbar.setTitle("Spam")
             }
             R.id.nav_trash -> {
                 details!!.displaylist("Trash")
-                mainMenu?.findItem(R.id.action_settings)?.isVisible   = false
+                mainMenu?.findItem(R.id.action_settings)?.isVisible = false
                 toolbar.setTitle("Trash")
             }
         }
@@ -131,8 +130,6 @@ class NavigationDrawerActivity : AppCompatActivity(), NavigationView.OnNavigatio
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
-
-
 
 
 }

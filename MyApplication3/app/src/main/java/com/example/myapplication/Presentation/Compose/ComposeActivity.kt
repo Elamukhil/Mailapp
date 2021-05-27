@@ -2,26 +2,23 @@ package com.example.myapplication.Presentation.Compose
 
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.OnFocusChangeListener
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.myapplication.Data.MailData
-import com.example.myapplication.Data.MyContentProvider
 import com.example.myapplication.Domain.Mail
-import com.example.myapplication.Presentation.NavigationDrawer.NavigationDrawerActivity
 import com.example.myapplication.R
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class ComposeActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.compose_activity)
@@ -64,7 +61,6 @@ class ComposeActivity : AppCompatActivity() {
                 //set message for alert dialog
                 builder.setMessage("No recipients in To or Cc")
                 builder.setIcon(android.R.drawable.ic_dialog_alert)
-
                 //performing positive action
                 builder.setPositiveButton("OK") { _, _ ->
                 }
@@ -95,8 +91,8 @@ class ComposeActivity : AppCompatActivity() {
                     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh.mm a")
                     val formatted = current.format(formatter).toString()
                     val list = formatted.split(" ")
-                    val mail = Mail(MailData.getsize() + 1, "android@gmail.com", string, string1, string2, list[0], list[1] + " " + list[2])
-                    MyContentProvider.DatabaseHelper(applicationContext).insertdata(mail, 3)
+                    val mail = Mail(MailData.getInstance(applicationContext).getsize() + 1, 3, 0, "android@gmail.com", string, string1, string2, list[0], list[1] + " " + list[2])
+                    MailData.getInstance(applicationContext).insertdata(mail)
                     Toast.makeText(applicationContext, "Mail sent", Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -112,8 +108,8 @@ class ComposeActivity : AppCompatActivity() {
                 val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh.mm a")
                 val formatted = current.format(formatter).toString()
                 val list = formatted.split(" ")
-                val mail = Mail(MailData.getsize() + 1, "android@gmail.com", string, string1, string2, list[0], list[1] + " " + list[2])
-                MyContentProvider.DatabaseHelper(applicationContext).insertdata(mail, 3)
+                val mail = Mail(MailData.getInstance(applicationContext).getsize() + 1, 3, 0, "android@gmail.com", string, string1, string2, list[0], list[1] + " " + list[2])
+                MailData.getInstance(applicationContext).insertdata(mail)
                 Toast.makeText(applicationContext, "Mail sent", Toast.LENGTH_SHORT).show()
                 finish()
                 true
